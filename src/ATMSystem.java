@@ -63,62 +63,6 @@ public class ATMSystem {
          * Show the remaining balance of the account after a successful withdrawal
          * Prompt the user for more withdrawals or quit
          */
-
-
-        /*
-         * Generally Code Chef, Hacker Rank gives X number of test cases so we
-         * process the input for each.
-         */
-        final int cases;
-        try {
-            cases = Integer.parseInt(br.readLine().trim());
-            /*
-             * Logic of the program must be separated from the meta code to
-             * increase readability and help debugging easier
-             * Also note that Solver object is created inside for loop to
-             * avoid multiple object creation that drastically increases
-             * execution time and memory usage
-             */
-            Solver solver = new Solver();
-            for (int i = 0; i < cases; i++) {
-                solver.solve(br.readLine());
-            }
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        // Print the final output
-        System.out.println(output);
     }
-
-}
-/*
- * Some basic rules while coding in Programming Contests:
- * Try to follow at least 80% of them
-	Correctness
-		- final declaration for required data types
-		- avoid Object creation
-		- Scanner slows down, use InputReader
-		- avoid too many static functions
-	Efficiency
-		- use library functions as much as possible
-		- assertEquals("RESULT", functionToCall())
-	Debugging-ability
-		- avoid too many global variables
-		- Separate logic from meta-processing
-		- variable/function pneumonics must make sense
- *
- */
-class Solver {
-
-    /*
-     * Logic goes here ...
-     * Add to the global variables after processing the input
-     * Maybe reverse a string or parse to an integer or , etc.
-     */
-    public void solve(String input) {
-        Main.output.concat(input);
-    }
-
+    
 }
