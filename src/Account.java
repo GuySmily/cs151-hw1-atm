@@ -1,12 +1,12 @@
 public class Account {
     private Bank hostBank;
-    private int accountNumber;
+    private long accountNumber;
     private Customer owner;
     private String password;
     private double balance;
     private String cardNumber;  //Limit one per acct
 
-    public Account(Bank hostBank, int accountNumber, Customer cust, String password, double initialBalance){
+    public Account(Bank hostBank, long accountNumber, Customer cust, String password, double initialBalance){
         this.hostBank = hostBank;
         this.accountNumber = accountNumber;
         this.owner = cust;
@@ -26,6 +26,29 @@ public class Account {
         return "Acct: " + accountNumber +
                ", Bal: $" + balance +
                ", Card: " + cardNumber +
+               ", Card: " + cardNumber +
                ", PW: " + password;
+    }
+
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    // Could return balance here, but usually ATMs do not display balance - you have to explicitly request balances.
+    public boolean withdraw(double amount) {
+        boolean success = false;
+        if (balance >= amount) {
+            balance -= amount;
+            success = true;
+        }
+        return success;
+    }
+
+    public long getNumber() {
+        return accountNumber;
     }
 }

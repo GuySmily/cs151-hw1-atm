@@ -29,18 +29,11 @@ public class ATMSystem {
         Customer cust2 = new Customer();  // with BankB
         Customer cust3 = new Customer();  // with BankA and BankB
 
-        // Note: card variables are named by bank and customer for convenience.
-        // Ideally these should go in a Customer's Wallet or something.
-        Card cardA1 = bankA.openAccount(cust1, "passsword", 1000);
-        Card cardB2 = bankB.openAccount(cust2, "passsword", 1000);
-        Card cardA3 = bankA.openAccount(cust3, "passsword", 500);
-        Card cardB3 = bankB.openAccount(cust3, "passsword", 500);
-
-
-        /*
-         * Print initial state
-         */
-
+        // Each account comes with a card, which is stored in bank database (arraylist for now)
+        bankA.openAccount(cust1, "passsword", 1000);
+        bankB.openAccount(cust2, "passsword", 1000);
+        bankA.openAccount(cust3, "passsword", 500);
+        bankB.openAccount(cust3, "passsword", 500);
 
         // ****************************************************************
         // REQUIRED OUTPUTS
@@ -48,24 +41,26 @@ public class ATMSystem {
         // Show a list of cards associated with an account at a bank with their expiration dates and passwords
         bankA.printAccounts();
         bankB.printAccounts();
+        System.out.println();
 
         // Show a list of ATMs for each bank along with how much a card can withdraw from each ATMSystem
         bankA.printATMs();
         bankB.printATMs();
+        System.out.println();
 
         // Prompt user for their desired ATM (and bank)
-        sc.useDelimiter(""); // Only take one character at a time
+        //sc.useDelimiter(""); // Only take one character at a time
         Bank selectedBank = null;
         while (selectedBank == null)
         {
-            System.out.print("Go to Bank A (y/n)? ");
-            if (sc.next().toLowerCase() == "y"){
+            System.out.print("Go to " + bankA.getName() + " (y/n)? ");
+            if (String.valueOf(sc.next().charAt(0)).toLowerCase().equals("y")) {
                 System.out.println();
                 selectedBank = bankA;
             }
             else {
-                System.out.print("Go to Bank B (y/n)? ");
-                if (sc.next().toLowerCase() == "y") {
+                System.out.print("Go to " + bankB.getName() + " (y/n)? ");
+                if (String.valueOf(sc.next().charAt(0)).toLowerCase().equals("y")) {
                     System.out.println();
                     selectedBank = bankB;
                 }

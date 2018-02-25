@@ -1,3 +1,4 @@
+import javax.print.DocFlavor;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,15 +8,15 @@ public class Bank {
     private String name;
     private String bank_id;
 
-    private ArrayList<ATM> atms = new ArrayList<ATM>;
+    private ArrayList<ATM> atms = new ArrayList<>();
     private HashMap<String, Account> accounts = new HashMap<String, Account>();
     private HashMap<String, Card> cards = new HashMap<String, Card>();
-    private int nextAcctNumber = 5000;
-
+    private long nextAcctNumber = 5000;
+    private long nextIAI = 123456789;  // 6 digit IIN + 9 digit IAI + 1 digit checksum
 
     public Bank(String bankName, String IIN){
-        name = bankName;
-        bank_id = IIN;
+        this.name = bankName;
+        this.bank_id = IIN;
     }
     public enum CardStatus {
         UNRECOGNIZED, EXPIRED, VALID, INVALID
@@ -27,25 +28,25 @@ public class Bank {
         Account acct = new Account(this, nextAcctNumber++, cust, password, initialDeposit);
 
         // Create card that points to this account
-        Card card = new Card(bank_id, acct.getNumber(), LocalDate.now().plusYears(3));
+        Card card = new Card(bank_id, acct.getNumber(), this.bank_id, nextIAI++, LocalDate.now().plusYears(3));
 
         // Update acct with new card number
         acct.assignCardNumber(card.getNumber());
 
         // Store card and account in bank database
-        accounts.put(card.getNumber, acct);
-        cards.put(card.getNumber, card);
+        accounts.put(card.getNumber(), acct);
+        cards.put(card.getNumber(), card);
 
     }
 
     public void buildATM(int atmNumber, int withdrawalLimit) {
         // Caution: It needs to be not allowed to insert over existing atmNumber
-        atms.add(atmNumber, new ATM(this, atmNumber, withdrawalLimit));
+        atms.add(atmNumber - 1, new ATM(this, atmNumber, withdrawalLimit));
     }
 
     public void useATM(int atmNumber) {
         // Caution: No error checking here yet
-        atms.get(atmNumber).transact();
+        atms.get(atmNumber - 1).transact();
     }
 
     public String getName() {
@@ -90,15 +91,24 @@ public class Bank {
         else if (card.isExpired()) {
             status = CardStatus.EXPIRED;
         }
-        // Additional checks... acct closed, etc
+        //TODO: Additional checks... acct closed, etc
         else{
             // Card exists in bank DB, related acct exists in DB, card is not expired.
+            status = CardStatus.VALID;
         }
 
         return status;
     }
 
     public boolean validatePassword(String cardNumber, String password) {
-        accounts.get(cardNumber)
+        return accounts.get(cardNumber).checkPassword(password);
+    }
+
+    public boolean validateWithdrawalAmount(String cardNumber, int amount) {
+        return amount <= accounts.get(cardNumber).getBalance();
+    }
+
+    public boolean postTransaction(String cardNumber, int amount) {
+        return accounts.get(cardNumber).withdraw(amount);
     }
 }

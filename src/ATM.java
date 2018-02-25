@@ -28,7 +28,6 @@ public class ATM {
         Scanner sc = new Scanner(System.in);  // This should be replaced by ATM touchscreen/keypad input.
         int amount = 0;
 
-
         /* ****************************************************************
          * Welcome message / insert card
          * **************************************************************** */
@@ -73,7 +72,7 @@ public class ATM {
                 display("Need help?  See a teller inside.  Please take your card.");
                 return;
             }
-            validPassword = hostBank.validatePassword(cardNumber, password);
+            validPassword = hostBank.validatePassword(cardNumber, String.valueOf(password));
             if (!validPassword) display("Password rejected by bank.");
         }
 
@@ -124,8 +123,6 @@ public class ATM {
         }
     }
 
-    private Card getCardFromNumber()
-
     /**
      * Print a message to the ATM's display.
      * @param message text to display.
@@ -153,6 +150,6 @@ public class ATM {
         return hostBank;
     }
     public String toString() {
-        return "I am ATM" + atmNumber + "at Bank '" + hostBank.getName() + ", withdrawal limit $" + withdrawalLimit;
+        return "I am ATM " + atmNumber + " at Bank '" + hostBank.getName() + "'.  Withdrawal limit: $" + withdrawalLimit;
     }
 }
