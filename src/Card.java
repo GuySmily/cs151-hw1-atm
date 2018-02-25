@@ -9,5 +9,9 @@ public class Card {
         this.bank_id = bank_id;
         this.cardNumber = cardNumber;
         this.expiration = expiration;
-
     }
+
+    public String toString() {
+        return "Card Number: " + cardNumber + "; Exp: " + expiration;
+    }
+}

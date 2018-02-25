@@ -6,10 +6,13 @@ public class Account {
     private Card cardNumber;  //Limit one per acct
 
 
-    public Account(Customer cust, double initialBalance){
+    public Account(Customer cust, String password, double initialBalance){
 
     }
-    public void changeCardNumber(){
+    public String assignCardNumber(){
+
+    }
+    public String getCardNumber() {
 
     }
 }
