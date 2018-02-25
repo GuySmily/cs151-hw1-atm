@@ -8,7 +8,7 @@ import java.util.Scanner;
 /**
  * @author Enrique Pedrosa
  * StudentID 004004430
- *
+ * Initializes some bank/ATM systems and customers and accepts inputs for ATM system
  */
 public class ATMSystem {
     // Program's starting point
@@ -40,6 +40,7 @@ public class ATMSystem {
         // ****************************************************************
         // Show a list of cards associated with an account at a bank with their expiration dates and passwords
         bankA.printAccounts();
+        System.out.println();
         bankB.printAccounts();
         System.out.println();
 
@@ -48,48 +49,42 @@ public class ATMSystem {
         bankB.printATMs();
         System.out.println();
 
-        // Prompt user for their desired ATM (and bank)
-        //sc.useDelimiter(""); // Only take one character at a time
-        Bank selectedBank = null;
-        while (selectedBank == null)
-        {
-            System.out.print("Go to " + bankA.getName() + " (y/n)? ");
-            if (String.valueOf(sc.next().charAt(0)).toLowerCase().equals("y")) {
-                System.out.println();
-                selectedBank = bankA;
-            }
-            else {
-                System.out.print("Go to " + bankB.getName() + " (y/n)? ");
+        boolean quit = false;
+
+        while (!quit) {
+            // Prompt user for their desired ATM (and bank)
+            //sc.useDelimiter(""); // Only take one character at a time
+            Bank selectedBank = null;
+            while (selectedBank == null) {
+                System.out.print("Go to " + bankA.getName() + " (y/n)? ");
                 if (String.valueOf(sc.next().charAt(0)).toLowerCase().equals("y")) {
-                    System.out.println();
-                    selectedBank = bankB;
+                    //System.out.println();
+                    selectedBank = bankA;
+                } else {
+                    System.out.print("Go to " + bankB.getName() + " (y/n)? ");
+                    if (String.valueOf(sc.next().charAt(0)).toLowerCase().equals("y")) {
+                        //System.out.println();
+                        selectedBank = bankB;
+                    }
                 }
             }
+
+            int selectedATM = 0;
+            // Note: This assumes that all banks have 2 ATMs
+            while (selectedATM < 1 || selectedATM > 2) {
+                System.out.print("ATM 1 or 2? ");
+                selectedATM = sc.nextInt(); sc.nextLine();  // Eat the newline
+                System.out.println();
+            }
+
+            selectedBank.useATM(selectedATM);
+
+            // Note: The remaining prompts are handled by the ATM.
+
+            // Prompt the user for more withdrawals or quit
+            System.out.print("Go to another bank (y/n)? ");
+            quit = String.valueOf(sc.next().charAt(0)).toLowerCase().equals("n");
         }
-
-        int selectedATM = 0;
-        // Note: This assumes that all banks have 2 ATMs
-        while (selectedATM < 1 || selectedATM > 2) {
-            System.out.print("ATM 1 or 2? ");
-            selectedATM = sc.nextInt();
-            System.out.println();
-        }
-
-        selectedBank.useATM(selectedATM);
-
-        // Note: The remaining prompts are handled by the ATM.
-
-        // Prompt user for their card
-        // Show the ATM response when the card is somehow invalid (expired, wrong bank)
-        // Show the ATM response when the card is valid
-        // Prompt user for the password
-        // Show the ATM response when the password is invalid
-        // Show the ATM response when the password is valid
-        // Prompt user for the amount to withdraw
-        // Show the ATM response when the desired withdrawal amount is above that specific ATM's daily withdrawal limit
-        // Show the ATM response when the desired withdrawal amount is under or at the limit
-        // Show the remaining balance of the account after a successful withdrawal
-        // Prompt the user for more withdrawals or quit
     }
 
 }

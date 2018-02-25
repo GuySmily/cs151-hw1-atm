@@ -1,0 +1,65 @@
+"C:\Program Files\Java\jdk-9.0.4\bin\java" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2017.3.4\lib\idea_rt.jar=62484:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2017.3.4\bin" -Dfile.encoding=UTF-8 -classpath C:\Users\epedrosa\StashProjects\cs151-hw1-atm\out\production\cs151-hw1-atm ATMSystem
+----- Bank A: Account Report -----
+Acct: 5001, Bal: $500.0, Card: 4207671234567900, PW: passsword
+Acct: 5000, Bal: $1000.0, Card: 4207671234567899, PW: passsword
+
+----- Z Bank: Account Report -----
+Acct: 5001, Bal: $500.0, Card: 4167241234567900, PW: passsword
+Acct: 5000, Bal: $1000.0, Card: 4167241234567899, PW: passsword
+
+I am ATM 1 at Bank 'Bank A'.  Withdrawal limit: $500
+I am ATM 2 at Bank 'Bank A'.  Withdrawal limit: $1000
+I am ATM 1 at Bank 'Z Bank'.  Withdrawal limit: $500
+I am ATM 2 at Bank 'Z Bank'.  Withdrawal limit: $1000
+
+Go to Bank A (y/n)? n
+Go to Z Bank (y/n)? y
+ATM 1 or 2? 1
+
+Welcome to Z Bank!  This ATM only supports withdrawals at this time.  Limit: $500.
+Insert card to begin ((enter card number)): 4207671234567900
+Validating card.  Please wait...
+Card number not recognized.  Are you at the right bank?  Please take your card.
+
+Welcome to Z Bank!  This ATM only supports withdrawals at this time.  Limit: $500.
+Insert card to begin ((enter card number)): 123456
+Validating card.  Please wait...
+Unable to read your card.  ((Please enter 16 digit numbers only.))
+
+Welcome to Z Bank!  This ATM only supports withdrawals at this time.  Limit: $500.
+Insert card to begin ((enter card number)): 4167241234567900
+Validating card.  Please wait...
+
+Please enter your password (leave blank to quit): password
+Password rejected by bank.
+Please enter your password (leave blank to quit): passsword
+
+Our machines can give you bills in any denomination!
+Please enter withdrawal amount, up to $500: 600
+Sorry, the maximum withdrawal amount at this machine is: 500
+
+Please enter withdrawal amount, up to $500: 400
+Processing.  Please wait.
+
+Withdrawal approved!  Please wait while transaction is processed.
+Transaction processed.  Your new balance is: $100.0
+Please take your receipt.
+Please take your cash.
+Another transaction (y/n)? y
+Please enter withdrawal amount, up to $500: 400
+Processing.  Please wait.
+Withdrawal declined.  Try another amount?
+
+Please enter withdrawal amount, up to $500: 100
+Processing.  Please wait.
+
+Withdrawal approved!  Please wait while transaction is processed.
+Transaction processed.  Your new balance is: $0.0
+Please take your receipt.
+Please take your cash.
+Another transaction (y/n)? n
+Please take your card.
+Thank you for banking with Z Bank!
+Go to another bank (y/n)? n
+
+Process finished with exit code 0
