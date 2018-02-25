@@ -13,11 +13,13 @@ import java.util.Scanner;
  */
 public class ATM {
     private Bank hostBank;
+    private int atmNumber;  // Keep track of ATM number for receipt printing, etc
     private int withdrawalLimit;  // Whole dollars, please.
     private String state;
 
-    public ATM(Bank hostBank, int withdrawalLimit) {
+    public ATM(Bank hostBank, int atmNumber, int withdrawalLimit) {
         this.hostBank = hostBank;
+        this.atmNumber = atmNumber;
         this.withdrawalLimit = withdrawalLimit;
         this.state = "idle";
     }
@@ -26,14 +28,18 @@ public class ATM {
         Scanner sc = new Scanner(System.in);  // This should be replaced by ATM touchscreen/keypad input.
         int amount = 0;
 
-        // Welcome message / insert card
+
+        /* ****************************************************************
+         * Welcome message / insert card
+         * **************************************************************** */
         display("Welcome to " + hostBank.getName() + "!  This ATM only supports withdrawals at this time.  " +
                 "Limit: $" + withdrawalLimit + ".\n" +
                 "Insert card to begin ((enter card number)): ", false);
         String cardNumber = String.valueOf(sc.nextInt());  //Get int from sc to reduce input validation
-        //TODO: Input validation
 
-        // Card validation
+        /* ****************************************************************
+         * Card validation
+         * **************************************************************** */
         display("Validating card.  Please wait.");
         Bank.CardStatus cardStatus = hostBank.validateCard(cardNumber);
         //IMPORTANT: We adopt guard clauses here to avoid massive nesting, so we're using return instead of break!
@@ -56,7 +62,9 @@ public class ATM {
                 return;
         }
 
-        // Password validation
+        /* ****************************************************************
+         * Password validation
+         * **************************************************************** */
         boolean validPassword = false;
         while (!validPassword) {
             display("Please enter your password (leave blank to quit): ", false);
@@ -69,7 +77,9 @@ public class ATM {
             if (!validPassword) display("Password rejected by bank.");
         }
 
-        // Withdrawal amount
+        /* ****************************************************************
+         * Withdrawal amount
+         * **************************************************************** */
         display("Our machines can give you bills in any denomination, up to $" + withdrawalLimit + "!");
         boolean validAmount = false;
         while (!validAmount) {
@@ -96,7 +106,9 @@ public class ATM {
             }
         }
 
-        // Post transaction
+        /* ****************************************************************
+         * Post transaction
+         * **************************************************************** */
         display("Withdrawal approved!  Please wait while transaction is processed.");
         if (hostBank.postTransaction(cardNumber, amount)) {
             display("Transaction processed.  Please take your card.", false);
@@ -110,9 +122,9 @@ public class ATM {
         else {
             display("The transaction could not be completed.  SOMETHING BAD HAPPENED.");
         }
-
-        return;
     }
+
+    private Card getCardFromNumber()
 
     /**
      * Print a message to the ATM's display.
@@ -131,11 +143,16 @@ public class ATM {
         display(message, true);
     }
 
-    public giveInput(String input) {
-        switch (this.state) {
-            case "idle"
-        }
+    public int getWithdrawalLimit() {
+        return withdrawalLimit;
     }
-
-
+    public int getAtmNumber() {
+        return atmNumber;
+    }
+    public Bank getHostBank() {
+        return hostBank;
+    }
+    public String toString() {
+        return "I am ATM" + atmNumber + "at Bank '" + hostBank.getName() + ", withdrawal limit $" + withdrawalLimit;
+    }
 }

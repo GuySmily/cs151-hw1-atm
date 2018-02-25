@@ -13,36 +13,33 @@ import java.util.Scanner;
 public class ATMSystem {
     // Program's starting point
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
         /*
          * Create objects and set up initial states for our scenario
          */
         Bank bankA = new Bank("Bank A", "420767");
         Bank bankB = new Bank("Z Bank", "416724");
 
-        ATM atmA1 = bankA.buildATM(500);
-        ATM atmA2 = bankA.buildATM(1000);
-        ATM atmB1 = bankB.buildATM(500);
-        ATM atmB2 = bankB.buildATM(1000);
+        bankA.buildATM(1, 500);
+        bankA.buildATM(2, 1000);
+        bankB.buildATM(1, 500);
+        bankB.buildATM(2, 1000);
 
         Customer cust1 = new Customer();  // with BankA
         Customer cust2 = new Customer();  // with BankB
         Customer cust3 = new Customer();  // with BankA and BankB
 
         // Note: card variables are named by bank and customer for convenience.
+        // Ideally these should go in a Customer's Wallet or something.
         Card cardA1 = bankA.openAccount(cust1, "passsword", 1000);
         Card cardB2 = bankB.openAccount(cust2, "passsword", 1000);
         Card cardA3 = bankA.openAccount(cust3, "passsword", 500);
         Card cardB3 = bankB.openAccount(cust3, "passsword", 500);
 
 
-
-        bankA.setCustomerBalance(custA1, 40.0);
         /*
          * Print initial state
          */
-
-        // Input scanner
-        Scanner sc = new Scanner(System.in);
 
 
         // ****************************************************************
@@ -56,7 +53,36 @@ public class ATMSystem {
         bankA.printATMs();
         bankB.printATMs();
 
-        // Prompt user for their desired ATM
+        // Prompt user for their desired ATM (and bank)
+        sc.useDelimiter(""); // Only take one character at a time
+        Bank selectedBank = null;
+        while (selectedBank == null)
+        {
+            System.out.print("Go to Bank A (y/n)? ");
+            if (sc.next().toLowerCase() == "y"){
+                System.out.println();
+                selectedBank = bankA;
+            }
+            else {
+                System.out.print("Go to Bank B (y/n)? ");
+                if (sc.next().toLowerCase() == "y") {
+                    System.out.println();
+                    selectedBank = bankB;
+                }
+            }
+        }
+
+        int selectedATM = 0;
+        // Note: This assumes that all banks have 2 ATMs
+        while (selectedATM < 1 || selectedATM > 2) {
+            System.out.print("ATM 1 or 2? ");
+            selectedATM = sc.nextInt();
+            System.out.println();
+        }
+
+        selectedBank.useATM(selectedATM);
+
+        // Note: The remaining prompts are handled by the ATM.
 
         // Prompt user for their card
         // Show the ATM response when the card is somehow invalid (expired, wrong bank)
@@ -69,7 +95,6 @@ public class ATMSystem {
         // Show the ATM response when the desired withdrawal amount is under or at the limit
         // Show the remaining balance of the account after a successful withdrawal
         // Prompt the user for more withdrawals or quit
-         */
     }
 
 }

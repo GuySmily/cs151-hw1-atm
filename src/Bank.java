@@ -8,9 +8,10 @@ public class Bank {
     private String bank_id;
 
     private ArrayList<ATM> atms = new ArrayList<ATM>;
-
-    //In lieu of a RDBMS, this data structure will store our Account objects for lookup by card number
     private HashMap<String, Account> accounts = new HashMap<String, Account>();
+    private HashMap<String, Card> cards = new HashMap<String, Card>();
+    private int nextAcctNumber = 5000;
+
 
     public Bank(String bankName, String IIN){
         name = bankName;
@@ -21,51 +22,83 @@ public class Bank {
     }
     // Since an account is limited to one card, we'll treat them as the same.
     // If a customer loses a card, they must close their old account/card and create a new one.
-    public Card openAccount(Customer cust, String password, double initialDeposit) {
-        Account acct = new Account(cust, password, initialDeposit);
+    public void openAccount(Customer cust, String password, double initialDeposit) {
+        // Create account
+        Account acct = new Account(this, nextAcctNumber++, cust, password, initialDeposit);
 
-        LocalDate expr = LocalDate.now().plusYears(3);
-        card = new Card(bank_id, acct.getNumber(), expr);
+        // Create card that points to this account
+        Card card = new Card(bank_id, acct.getNumber(), LocalDate.now().plusYears(3));
 
-        acct.assignCard(card.getNumber());
+        // Update acct with new card number
+        acct.assignCardNumber(card.getNumber());
+
+        // Store card and account in bank database
         accounts.put(card.getNumber, acct);
+        cards.put(card.getNumber, card);
 
-
-        return card;
     }
 
-    public void buildATM(int withdrawalLimit) {
-        atms.add(new ATM(this, withdrawalLimit))
+    public void buildATM(int atmNumber, int withdrawalLimit) {
+        // Caution: It needs to be not allowed to insert over existing atmNumber
+        atms.add(atmNumber, new ATM(this, atmNumber, withdrawalLimit));
     }
 
-    /* ****************************************************************
-     * Transaction validation helper functions for ATMs
-     * **************************************************************** */
-    public CardStatus validateCard(String cardNumber){
-        CardStatus status = CardStatus.INVALID;
-
-        cardNumber = cardNumber.replace(" ", "")
-                               .replace("-", "");
-        if (cardNumber.length() != 16) {
-            status = CardStatus.INVALID;
-        }
-        else if (! cardNumber.startsWith(this.bank_id)) {
-            status = CardStatus.UNRECOGNIZED;
-        }
-
-
-        return status;
+    public void useATM(int atmNumber) {
+        // Caution: No error checking here yet
+        atms.get(atmNumber).transact();
     }
 
     public String getName() {
         return name;
     }
 
+    public void printATMs() {
+        for (ATM atm : this.atms) {
+            System.out.println(atm.toString());
+        }
+    }
+
     public void printAccounts() {
+        // Requirements:
+        // Show a list of cards associated with an account at a bank with their expiration dates and passwords
+        System.out.println("----- " + this.name + ": Account Report -----");
         for (Account acct : this.accounts.values()) {
             System.out.println(acct);
         }
     }
+    /* ****************************************************************
+     * Transaction validation helper functions for ATMs
+     * **************************************************************** */
+    public CardStatus validateCard(String cardNumber){
+        CardStatus status = CardStatus.INVALID;
 
+        Card card = cards.get(cardNumber);
+        Account acct = accounts.get(cardNumber);
 
+        if (cardNumber.length() != 16) {
+            status = CardStatus.INVALID;
+        }
+        else if (! cardNumber.startsWith(this.bank_id)) {
+            status = CardStatus.UNRECOGNIZED;
+        }
+        else if (card == null) {
+            status = CardStatus.UNRECOGNIZED;
+        }
+        else if (acct == null) {
+            status = CardStatus.UNRECOGNIZED;
+        }
+        else if (card.isExpired()) {
+            status = CardStatus.EXPIRED;
+        }
+        // Additional checks... acct closed, etc
+        else{
+            // Card exists in bank DB, related acct exists in DB, card is not expired.
+        }
+
+        return status;
+    }
+
+    public boolean validatePassword(String cardNumber, String password) {
+        accounts.get(cardNumber)
+    }
 }
